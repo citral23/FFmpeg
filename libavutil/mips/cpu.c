@@ -19,7 +19,7 @@
 #include "libavutil/cpu.h"
 #include "libavutil/cpu_internal.h"
 #include "config.h"
-#if defined __linux__ || defined __ANDROID__
+#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -28,7 +28,7 @@
 #include "libavutil/avstring.h"
 #endif
 
-#if defined __linux__ || defined __ANDROID__
+#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
 
 #define HWCAP_LOONGSON_CPUCFG (1 << 14)
 
@@ -105,7 +105,7 @@ static int cpu_flags_cpuinfo(void)
 
 int ff_get_cpu_flags_mips(void)
 {
-#if defined __linux__ || defined __ANDROID__
+#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
     if (cpucfg_available())
         return cpu_flags_cpucfg();
     else
