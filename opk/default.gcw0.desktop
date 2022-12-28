@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=FFplay
+Comment=Video Player
+Exec=ffplay %f
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=ffplay
+Categories=applications;
+X-OD-Manual=manual.txt

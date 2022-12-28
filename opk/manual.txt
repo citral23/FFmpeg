@@ -1,0 +1,19 @@
+FFplay for opendingux beta gcw0
+
+Keys:
+Start  - pause stream
+Select - exit player
+Left   - seek -10s
+Right  - seek +10s
+Down   - seek -60s
+Up     - seek +60s
+L1     - volume -
+R1     - volume +
+A      - toggle audio stream
+B      - mute
+X      - toggle subtitle stream
+Y      - toggle video stream
+L2     - seek -600s if chapters <=1, otherwise previous chapter
+R2     - seek +600s if chapters <=1, otherwise next chapter
+
+Suggested encoding settings : ffmpeg -i source.xxx -c:v libx264 -profile:v baseline -tune fastdecode -vf scale=320:-1 -crf 18 -preset slow -c:a aac -ab 128k -ar 24000 output.mp4
