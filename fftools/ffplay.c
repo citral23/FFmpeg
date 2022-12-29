@@ -3294,27 +3294,27 @@ static void event_loop(VideoState *cur_stream)
                 cur_stream->force_refresh = 1;
                 break;
             case SDLK_p:
-            case SDLK_SPACE:
+            case SDLK_RETURN:
                 toggle_pause(cur_stream);
                 break;
-            case SDLK_m:
+            case SDLK_LALT:
                 toggle_mute(cur_stream);
                 break;
-            case SDLK_KP_MULTIPLY:
+            case SDLK_BACKSPACE:
             case SDLK_0:
                 update_volume(cur_stream, 1, SDL_VOLUME_STEP);
                 break;
-            case SDLK_KP_DIVIDE:
+            case SDLK_TAB:
             case SDLK_9:
                 update_volume(cur_stream, -1, SDL_VOLUME_STEP);
                 break;
             case SDLK_s: // S: Step to next frame
                 step_to_next_frame(cur_stream);
                 break;
-            case SDLK_a:
+            case SDLK_LCTRL:
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_AUDIO);
                 break;
-            case SDLK_v:
+            case SDLK_LSHIFT:
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_VIDEO);
                 break;
             case SDLK_c:
@@ -3322,7 +3322,7 @@ static void event_loop(VideoState *cur_stream)
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_AUDIO);
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_SUBTITLE);
                 break;
-            case SDLK_t:
+            case SDLK_SPACE:
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_SUBTITLE);
                 break;
             case SDLK_w:
@@ -3338,14 +3338,14 @@ static void event_loop(VideoState *cur_stream)
                 toggle_audio_display(cur_stream);
 #endif
                 break;
-            case SDLK_PAGEUP:
+            case SDLK_PAGEDOWN:
                 if (cur_stream->ic->nb_chapters <= 1) {
                     incr = 600.0;
                     goto do_seek;
                 }
                 seek_chapter(cur_stream, 1);
                 break;
-            case SDLK_PAGEDOWN:
+            case SDLK_PAGEUP:
                 if (cur_stream->ic->nb_chapters <= 1) {
                     incr = -600.0;
                     goto do_seek;
