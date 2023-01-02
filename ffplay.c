@@ -1169,7 +1169,7 @@ static void set_default_window_size(int width, int height, AVRational sar)
 
 static int video_open(VideoState *is, int force_set_video_mode, Frame *vp)
 {
-    int flags = SDL_HWSURFACE | SDL_ASYNCBLIT | SDL_HWACCEL;
+    int flags = SDL_HWSURFACE;
     int w,h;
 
     if (is_full_screen) flags |= SDL_FULLSCREEN;
@@ -1192,7 +1192,9 @@ static int video_open(VideoState *is, int force_set_video_mode, Frame *vp)
     if (screen && is->width == screen->w && screen->w == w
        && is->height== screen->h && screen->h == h && !force_set_video_mode)
         return 0;
-    screen = SDL_SetVideoMode(w, h, 0, flags);
+    if (h > w)
+	h/=2;
+    screen = SDL_SetVideoMode(w, h, 16, flags);
     if (!screen) {
         av_log(NULL, AV_LOG_FATAL, "SDL: could not set video mode - exiting\n");
         do_exit(is);
@@ -3214,12 +3216,6 @@ static void stream_cycle_channel(VideoState *is, int codec_type)
 
 static void toggle_full_screen(VideoState *is)
 {
-#if defined(__APPLE__) && SDL_VERSION_ATLEAST(1, 2, 14)
-    /* OS X needs to reallocate the SDL overlays */
-    int i;
-    for (i = 0; i < VIDEO_PICTURE_QUEUE_SIZE; i++)
-        is->pictq.queue[i].reallocate = 1;
-#endif
     is_full_screen = !is_full_screen;
     video_open(is, 1, NULL);
 }
@@ -3309,16 +3305,16 @@ static void event_loop(VideoState *cur_stream)
                 cur_stream->force_refresh = 1;
                 break;
             case SDLK_p:
-            case SDLK_SPACE:
+            case SDLK_RETURN:
                 toggle_pause(cur_stream);
                 break;
             case SDLK_s: // S: Step to next frame
                 step_to_next_frame(cur_stream);
                 break;
-            case SDLK_a:
+            case SDLK_LCTRL:
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_AUDIO);
                 break;
-            case SDLK_v:
+            case SDLK_LSHIFT:
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_VIDEO);
                 break;
             case SDLK_c:
@@ -3326,7 +3322,7 @@ static void event_loop(VideoState *cur_stream)
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_AUDIO);
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_SUBTITLE);
                 break;
-            case SDLK_t:
+            case SDLK_SPACE:
                 stream_cycle_channel(cur_stream, AVMEDIA_TYPE_SUBTITLE);
                 break;
             case SDLK_w:
@@ -3342,14 +3338,14 @@ static void event_loop(VideoState *cur_stream)
                 toggle_audio_display(cur_stream);
 #endif
                 break;
-            case SDLK_PAGEUP:
+            case SDLK_PAGEDOWN:
                 if (cur_stream->ic->nb_chapters <= 1) {
                     incr = 600.0;
                     goto do_seek;
                 }
                 seek_chapter(cur_stream, 1);
                 break;
-            case SDLK_PAGEDOWN:
+            case SDLK_PAGEUP:
                 if (cur_stream->ic->nb_chapters <= 1) {
                     incr = -600.0;
                     goto do_seek;
@@ -3443,8 +3439,7 @@ static void event_loop(VideoState *cur_stream)
                 }
             break;
         case SDL_VIDEORESIZE:
-                screen = SDL_SetVideoMode(FFMIN(16383, event.resize.w), event.resize.h, 0,
-                                          SDL_HWSURFACE|(is_full_screen?SDL_FULLSCREEN:SDL_RESIZABLE)|SDL_ASYNCBLIT|SDL_HWACCEL);
+                screen = SDL_SetVideoMode(FFMIN(16383, event.resize.w), event.resize.h, 0, SDL_HWSURFACE);
                 if (!screen) {
                     av_log(NULL, AV_LOG_FATAL, "Failed to set video mode\n");
                     do_exit(cur_stream);

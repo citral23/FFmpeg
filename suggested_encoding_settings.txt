@@ -1,0 +1,1 @@
+ffmpeg -i source.xxx -c:v libx264 -profile:v baseline -tune fastdecode -vf scale=320:-1 -crf 18 -preset slow -c:a aac -ab 128k -ar 24000 output.mp4
