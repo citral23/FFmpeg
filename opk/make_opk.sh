@@ -2,14 +2,12 @@
 
 cd $(dirname $0)
 
-OPK_NAME="${1:-FFplay.opk}"
+OPK_NAME="FFplay_multi.opk"
 
 echo Building "${OPK_NAME}"...
 
 # create opk
-FLIST="../ffplay default.lepus.desktop ffplay.png manual.txt"
+FLIST="ffplay_gcw0 ffplay_lepus default.gcw0.desktop default.lepus.desktop ffplay.png manual.txt"
 
 rm -f "${OPK_NAME}"
 mksquashfs ${FLIST} "${OPK_NAME}" -all-root -no-xattrs -noappend -no-exports
-
-cat default.lepus.desktop

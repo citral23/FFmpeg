@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=FFplay
+Comment=Video Player
+Exec=env SDL_VIDEO_KMSDRM_SCALING_MODE=1 ./ffplay_gcw0 -autoexit %f
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=ffplay
+Categories=applications;
+X-OD-Manual=manual.txt
